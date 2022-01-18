@@ -1,7 +1,7 @@
 # -*- codeing = utf-8 -*-
 # @Time: 2022/1/18 14:06
 # @Author: Coisini
-# @File: 循环语句.py
+# @File: 循环语句-for.py
 # @Software: PyCharm
 
 '''
