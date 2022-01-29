@@ -3,6 +3,7 @@
 # @Author: Coisini
 # @File: testBs4.py
 # @Software: PyCharm
+import re
 
 from bs4 import BeautifulSoup
 file = open('./easy表格变色.html', "rb")
@@ -39,9 +40,40 @@ bs = BeautifulSoup(html, "html.parser")
 # print(t_list)
 
 # 传入一个函数，根据函数的要求来搜索，可以自定义搜索内容
-def name_is_exists(tag):
-    return tag.has_attr("name")
+# def name_is_exists(tag):
+#     return tag.has_attr("name")
+#
+# t_list = bs.find_all(name_is_exists)
+#
+# print(t_list)
 
-t_list = bs.find_all(name_is_exists)
 
-print(t_list)
+# 参数lwargs
+# t_list = bs.find_all(id="head")
+# for item in t_list:
+#     print(item)
+
+
+# text参数
+# t_list = bs.find_all(text="学校")
+# for item in t_list:
+#     print(item)
+
+# t_list = bs.find_all(text=re.compile("\d"))
+# for item in t_list:
+#     print(item)
+
+
+# CSS选择器
+# 通过标签查询
+# t_list = bs.select('title')
+# 通过类名查询
+# t_list = bs.select(".profession")
+# 通过id查询
+# t_list = bs.select("#head")
+# 通过属性查询
+# t_list = bs.select("td[class='profession']")
+# 通过子标签查找
+t_list = bs.select("head > title")
+for item in t_list:
+    print(item)

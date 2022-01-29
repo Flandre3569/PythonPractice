@@ -18,6 +18,9 @@ def main():
 # 爬取网页 获取数据
 def getData(baseurl):
     dataList = []
+    for i in range(0, 10):
+        url = baseurl + str(i * 25)
+        html = askUrl(url)  # 获取到的单个网页源码
     # 解析数据
     return dataList
 
@@ -40,7 +43,7 @@ def askUrl(url):
             print(e.code)
         if hasattr(e, "reason"):
             print(e.reason)
-    # return html
+    return html
 
 def saveData(savePath):
     print("save...")
