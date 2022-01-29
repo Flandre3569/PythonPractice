@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>表格变色</title>
+    <style>
+        table,td {
+            border:2px solid black;
+            font-size:50px;
+            text-align:center;
+        }
+        table {
+            border-collapse:collapse;
+        }
+        td {
+            width:300px;
+        }
+        .current{
+            background-color:pink;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <title>表格变色</title>
+    <tr>
+        <td name="school">学校</td>
+        <td>专业</td>
+        <td>人数</td>
+    </tr>
+    <tr>
+
+        <td>北大</td>
+        <td>法律</td>
+        <td>2000</td>
+    </tr>
+    <tr>
+
+        <td>清华</td>
+        <td>计算机</td>
+        <td>5000</td>
+    </tr>
+    <tr>
+
+        <td>人大</td>
+        <td>经济</td>
+        <td>6000</td>
+    </tr>
+</table>
+
+<script>
+    var trs=document.querySelectorAll('tr');
+    for(var i=0;i<trs.length;i++){
+        trs[i].onmouseover=function(){
+            this.className='current';
+        }
+        trs[i].onmouseout=function(){
+            this.className='';
+        }
+    }
+</script>
+</body>
+</html>
