@@ -4,6 +4,8 @@
 # @File: spider.py
 # @Software: PyCharm
 import urllib.request
+from bs4 import BeautifulSoup
+import re
 
 
 def main():
@@ -14,14 +16,27 @@ def main():
     # 保存数据
     savePath = ".\\豆瓣电影Top250.xls"
     # saveData(savePath)
-    askUrl("https://movie.douban.com/top250?start=")
+
+
+findLink = re.compile(r'<a href="(.*?)">')  # 生成正则表达式对象
+findImgSrc = re.compile(r'<img.*src="(.*?)"', re.S)
+
+
 # 爬取网页 获取数据
 def getData(baseurl):
     dataList = []
-    for i in range(0, 10):
+    for i in range(0, 1):
         url = baseurl + str(i * 25)
         html = askUrl(url)  # 获取到的单个网页源码
     # 解析数据
+    soup = BeautifulSoup(html, "html.parser")
+    for item in soup.find_all('div', class_="item"):    # 查找符合要求的字符串，形成列表
+        data = []  # 保存一部电影的全部信息
+        item = str(item)
+        print(item)
+        break
+        link = re.findall(findLink, item)[0]   # 使用正则表达式查找指定的字符串
+        print(link)
     return dataList
 
 
@@ -37,7 +52,6 @@ def askUrl(url):
     try:
         response = urllib.request.urlopen(request)
         html = response.read().decode("utf-8")
-        print(html)
     except urllib.error.URLError as e:
         if hasattr(e, "code"):
             print(e.code)
