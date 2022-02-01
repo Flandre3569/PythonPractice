@@ -4,6 +4,7 @@
 # @File: spider.py
 # @Software: PyCharm
 import urllib.request
+import urllib.error
 from bs4 import BeautifulSoup
 import re
 
@@ -18,8 +19,20 @@ def main():
     # saveData(savePath)
 
 
+# 影片链接获取规则
 findLink = re.compile(r'<a href="(.*?)">')  # 生成正则表达式对象
+# 影片封面获取规则
 findImgSrc = re.compile(r'<img.*src="(.*?)"', re.S)
+# 影片名
+findTitle = re.compile(r'<span class="title">(.*)</span>')
+# 影片评分
+findScore = re.compile(r'<span.*property="v:average">(.*)</span>')
+# 评价人数
+findNum = re.compile(r'<span>(\d*)人评价</span>')
+# 找到概况
+findInq = re.compile(r'<span class="inq">(.*)</span>')
+# 找到影片相关内容
+findBd = re.compile(r'<p class="">(.*?)</p>', re.S)
 
 
 # 爬取网页 获取数据
@@ -33,10 +46,46 @@ def getData(baseurl):
     for item in soup.find_all('div', class_="item"):    # 查找符合要求的字符串，形成列表
         data = []  # 保存一部电影的全部信息
         item = str(item)
-        print(item)
-        break
+
+        # 获取影片链接
         link = re.findall(findLink, item)[0]   # 使用正则表达式查找指定的字符串
-        print(link)
+        data.append(link)
+
+        imgSrc = re.findall(findImgSrc, item)[0]
+        data.append(imgSrc)
+
+        titles = re.findall(findTitle, item)
+        if(len(titles) == 2):
+            ctitle = titles[0]
+            data.append(ctitle)
+            otitle = titles[1].replace("/", "")
+            otitle = re.sub("\xa0", "", otitle)
+            data.append(otitle)
+        else:
+            data.append(titles[0])
+            data.append(' ')
+
+        score = re.findall(findScore, item)[0]
+        data.append(score)
+
+        num = re.findall(findNum, item)[0]
+        data.append(num)
+
+        inq = re.findall(findInq, item)
+        if len(inq) != 0:
+            inq = inq[0].replace("。", "")
+            data.append(inq)
+        else:
+            data.append(" ")
+
+        bd = re.findall(findBd, item)[0]
+        bd = re.sub('<br(\s+)?/>(\s+)?', ' ', bd)
+        bd = re.sub('/', " ", bd)
+        bd = re.sub('\xa0', " ", bd)
+        data.append(bd.strip())  # 去掉前后空格
+
+        dataList.append(data)  # 把处理好的一部电影信息放入dataList
+    print(dataList)
     return dataList
 
 
@@ -59,8 +108,10 @@ def askUrl(url):
             print(e.reason)
     return html
 
+
 def saveData(savePath):
     print("save...")
+
 
 if __name__ == '__main__':
     main()
