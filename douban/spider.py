@@ -7,6 +7,7 @@ import urllib.request
 import urllib.error
 from bs4 import BeautifulSoup
 import re
+import xlwt
 
 
 def main():
@@ -15,8 +16,8 @@ def main():
     dataList = getData(baseurl)
 
     # 保存数据
-    savePath = ".\\豆瓣电影Top250.xls"
-    # saveData(savePath)
+    savePath = "豆瓣电影Top25.xls"
+    saveData(dataList, savePath)
 
 
 # 影片链接获取规则
@@ -109,9 +110,21 @@ def askUrl(url):
     return html
 
 
-def saveData(savePath):
-    print("save...")
+def saveData(dataList, savePath):
+    book = xlwt.Workbook(encoding="utf-8", style_compression=0)
+    sheet = book.add_sheet("豆瓣电影top25", cell_overwrite_ok=True)
+    col = ("电影详情链接", "图片链接", "影片中文名", "影片外国名", "评分", "评分人数", "概况", "相关信息")
+    for i in range(0, 8):
+        sheet.write(0, i, col[i])
+    for i in range(0, 25):
+        print("第%d条" % (i+1))
+        data = dataList[i]
+        for j in range(0, 8):
+            sheet.write(i + 1, j, data[j])   # 数据填写
+
+    book.save(savePath)  # 保存
 
 
 if __name__ == '__main__':
     main()
+    print("爬取完成")
